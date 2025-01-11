@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Manipulation</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+<p class="class-message">Message 1.</p>
+<p class="class-message">Message 2.</p>
+<button id="id-message">Click Me</button>
+<script>
+    $('p');                 //select all <p> element
+    $('.class-message');    //select all element with class 'class-message'
+    $('#id-message');       //select all element with id 'id-message'
+
+    $(document).ready(function () {
+        $('#id-message').click(function () {
+            $('.class-message').text('Hallo JQuery');
+        });
+    });
+</script>
+</body>
+</html>
