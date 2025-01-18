@@ -9,10 +9,12 @@
 <body>
 <div class="input-container">
     <h1>Interactive To Do List</h1>
-    <div class="input">
+    <div class="input-wrapper">
         <input type="text" id="new-task" placeholder="Enter a New Task"/>
         <button id="add-task">Add Task</button>
-        <ul id="todo-list" class="todo-list"></ul>
+    </div>
+    <div class="task-wrapper">
+    <ul id="todo-list" class="todo-list"></ul>
     </div>
 </div>
 
@@ -27,22 +29,27 @@ $(function() {
                     <span id="task-text" class="task-text">${task}</span>
                     <span class="remove-btn">x</span>
                 </li>`;
-            $('#todo-list').append(listItem);
+            const $newItem = $(listItem).hide().appendTo('#todo-list').fadeIn(300).addClass('scale-up');
             $('#new-task').val(''); // Clear the input field
+
+            // Remove the animation class after the animation ends
+            setTimeout(() => $newItem.removeClass('scale-up'), 300);
         }
     });
 
     //Mark a task as Completed (event delegation)
-    $(document).on('click', '.task-text', function (){
+    $// Mark a task as Completed (event delegation)
+    $(document).on('click', '.task-text', function () {
         $(this).toggleClass('completed');
-        console.log("completed")
+        console.log("completed");
     });
 
-    //Remove a task (event delegation)
+    // Remove a task (event delegation)
     $(document).on('click', '.remove-btn', function () {
-        $(this).parent().remove()
-        console.log("removed")
-
+        const $parentItem = $(this).parent();
+        $parentItem.addClass('scale-down');
+        setTimeout(() => $parentItem.remove(), 300); // Wait for animation to complete
+        console.log("removed");
     });
 });
 </script>
@@ -59,10 +66,12 @@ $(function() {
         margin: 0;
 
     }
+    .input-container{
+        transition: width ease-in-out 0.3s, height ease-in-out 0.3s;
+    }
     input{
         border: none;
-        padding: 10px;
-
+        width: 100%;
         border-bottom: 2px solid #ccc;
         transition: ease 500ms;
     }
@@ -71,12 +80,20 @@ $(function() {
         outline: none;
         border-bottom: 2px solid #a29bfe;
     }
+    .input-wrapper{
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        width: 100%;
+        gap: 10px;
+    }
     button{
         border: none;
         border-radius: 12px;
         background-color: #a29bfe;
         padding: 10px;
         transition: ease 500ms;
+        cursor: pointer;
     }
     button:hover{
         background-color: #6c5ce7;
@@ -95,11 +112,17 @@ $(function() {
     }
     .todo-list{
         display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
         width: 100%;
         padding: 0;
         gap: 10px;
-
+    }
+    .task-text{
+        cursor: pointer;
+    }
+    .todo-item .task-text {
+        flex: 1;
+        word-wrap: break-word; /* Ensure text drops */
     }
     .todo-item{
         padding: 5px;
@@ -107,10 +130,12 @@ $(function() {
         display: flex;
         flex-direction: row;
         align-items: center;
+        word-wrap: break-word;
         justify-content: space-between;
         width: 100%;
         border: 1px solid #ccc;
         border-radius: 12px;
+
 
     }
     .remove-btn{
@@ -124,12 +149,45 @@ $(function() {
         transition: ease 0.3s;
         border-radius: 5px;
     }
+    .task-wrapper{
+        display: flex;
+        flex-direction: column;
+        padding: 0 0 0 0;
+        width: 100%;
+    }
     .remove-btn:hover{
         background-color: #636e72;
     }
     .completed{
         color: #6c5ce7;
        text-decoration: line-through;
+    }
+    .scale-up {
+        animation: scale-up 0.3s ease-in-out forwards;
+    }
+    .scale-down {
+        animation: scale-down 0.3s ease-in-out forwards;
+    }
+    @keyframes scale-up {
+        from {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes scale-down {
+        from {
+            transform: scale(1);
+            opacity: 1;
+        }
+        to {
+            transform: scale(0.8);
+            opacity: 0;
+        }
     }
 </style>
 </html>
